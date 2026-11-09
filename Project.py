@@ -8,3 +8,5 @@ def Dice (min,max):
     slumptal = random.randint(min,max)
     return slumptal
 
+def chest ():
+    
