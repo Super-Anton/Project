@@ -9,4 +9,5 @@ def Dice (min,max):
     return slumptal
 
 def chest ():
+    val = random.randint (1,3)
     
