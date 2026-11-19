@@ -4,54 +4,20 @@
 
 # Förord
 import random
-import time
+import Print_modul
+import Klasser
 
-#Klasser
-class Spelare():
-    def __init__(self):
-        self.lvl = 1
-        self.str = 5
-        self.maxhp = 2*self.lvl + 3
-        self.hp = 5
-        self.inv = []
+# Klasser
+spelare = Klasser.Player(1,5,5,[])
 
-    def lvlup(self):
-        print ("Du besegrade monstret och lvlade up")
-        self.lvl = self.lvl + 1
-        self.hp = self.hp + 1
-        self.str = self.str + 2
+svärd = Klasser.Item("svärd", "Öka din skada med denna vassa egg", 5)
+metallstav = Klasser.Item("metallstav", "stav av metall.", 4)
+katt = Klasser.Item("katt", "En hissande konpanion som använder ens vassa klor för dig.", 3)
+vapen_som_gör_2_skada = Klasser.Item("Vapen som gör 2 skada", "Det behövs ingen annan förklaring.", 2)
+plastkniv = Klasser.Item("plastkniv", "Bättre än inget... eller så är inget bättre.", 1)
+laserpistol = Klasser.Item("laserpistol", "Den är miljövänlig för att den går på el. Du kan sjuta ihjäl monster enkelt.", 7)
+skit = Klasser.Item("skit." "Inget är definitivt bättre.", 0)
 
-    def inventory_add (self,item):
-        if len(self.inv) == 5:
-            print ("Ditt inventory är fullt, vad vill du ta bort?")
-            for i in self.inv:
-                j = self.inv.index(i) + 1
-                print (f"[{j}], {i}, ")
-            print ("[6] Släng din nya pryl")
-            while True:
-                item_svar = input("")
-                for i in range (0,6):
-                    if item_svar == "6":
-                        break
-                    elif item_svar == str(i+1):
-                        self.inv.pop(i)
-                        self.inv.append(item)
-                    break
-        else:
-            self.inv.append(item)
-
-        
-class Item():
-    def __init__(self, name, förklaring, bonus):
-        self.name = name
-        self.förklaring = förklaring
-        self.bonus = bonus
-    def item_info(self):
-        print(f"{self.name}")
-        print(f"{self.förklaring}")
-        print(f"Du får +{self.bonus} till din STR")
-
-    
 # Funktioner
 def Dice (min,max):
     slumptal = random.randint(min,max)
@@ -60,32 +26,53 @@ def Dice (min,max):
 def chest ():
     in_chest = ["heal", "strength_bonus", "item"]
     items = ["axe", "thicker_cloth", "bunch_of_cats", "pistol"]
-    weights = [3 ,5 ,2]
-    picked_item = random.choices(in_chest, weights=weights, k=1) [0]
+    weight = [3 ,5 ,2]
+    picked_item = random.choices(in_chest, weights=weight, k=1) [0]
     if picked_item == "item":
         picked_item = random.choices(items, k=1) [0]
     return(picked_item)
 
 def open_door ():
     results = ["Monster", "Trap", "Chest"]
-    weights = [5,2,3]
-    picked_door = random.choice (results, weights=weights, k=1) [0]
+    weight = [5,2,3]
+    picked_door = random.choices(results, weights=weight, k=1) [0]
     if picked_door == "Monster":
         print ("Det finns en monster bakom dörren. Bakom den ser du trappan till nästa våning.")
     elif picked_door == "Trap":
-        possible_trap = ["Du rörde handtaget och PANG exploderade bomben bakom den. Du tar ", "Du rörde handtaget och den var ", "Du rörde handtaget och den var xxxxx"]
-        trap = random.choice(possible_trap, k=1) [0]
-        print (trap)
+        possible_trap = ["Du rörde handtaget och PANG exploderade bomben bakom den. Du tar ", "Det var en elak dörr! Dörren slår dig! Du tar ", "Du rörde handtaget och den var xxxxx. Du tar "]
+        trap = random.choices(possible_trap, k=1) [0]
+        print (trap, end="")
+        trap_damage = Dice (1,5)
+        print(f"{trap_damage} skada.")
+        spelare.skada(trap_damage)
     elif picked_door == "Chest":
         print ("Det finns en kista bakom dörren. ")
+        
     return (picked_door)
 
+def Monster():
+    spelar_str = Klasser.spelare.return_värde("lvl")
+    monster_str = Dice(3,7) + 2 * spelar_str
+    return monster_str
+
+def Fight(player_str, monster_str):
+    if player_str > monster_str:
+        Klasser.spelare.lvlup
+    elif monster_str - player_str < 2:
+        print (f"Nästan den var bara lite starkare än dig, Du tar {monster_str-player_str} skada")
+        spelare.skada(monster_str - player_str)
+    elif monster_str - player_str < 4:
+        print (f"Oof, Den var mycket starkare än dig, Du tar {monster_str - player_str} skada")
+        spelare.skada(monster_str - player_str)
+        
+def check_hp():
+    if Klasser.spelare.return_värde("hp") <= 0:
+        print ("du dog")
+    
+
+
 #HuvudProgram
-print ("Välkommen till vårat spel")
-print ("[1] Börja spela")
-print ("[2] Lore")
-print ("[3] Credits")
-print ("[4] Lämna")
+Print_modul.start_test()
 while True:
     svar_start = input ("")
     try:
@@ -102,8 +89,10 @@ while True:
         print ("du måste skriva en siffra")
 
 # Startat spel
-print ("Du kommer öppnar dörren till fabriken och möter ett par dörrrar. Vilken vill du gå in i?")
-print (f"[1] dörr 1\n[2] dörr 2\n[3] dörr 3")
+Print_modul.dörr_text()
+
 svar_dörr = input("")
 if svar_dörr == "1" or svar_dörr == "2" or svar_dörr == "3":
-    open_door()
+    spelare.inventory_add(katt)
+    spelare.inventory_add(svärd)
+    spelare.inv_print()
