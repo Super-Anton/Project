@@ -34,7 +34,7 @@ class Player():
 
     def inv_print (self):
         for i in self.inv:
-            print(f"{i.return_name()},",end=" ")
+            print(i, end=" ")
     
     def skada(self,antal):
         self.hp = self.hp - antal

@@ -14,9 +14,11 @@ def slow_print (message):
         time.sleep(0.1)
 
 def dörr_text():
-    print ("Du kommer öppnar dörren till fabriken och möter ett par dörrrar. Vilken vill du gå in i?")
+    print ("Du möter ett par dörrrar. Vilken vill du gå in i?")
     print (f"[1] dörr 1\n[2] dörr 2\n[3] dörr 3")
 
+
+credits =["credits", "", "", "", "proggrammerare:", "", "Anton Alm","", "Ayane Smith", "", "Hanrui Zhang", "", "", "", ]
 
 lore = """
             Du och din vän utforskade en gammal övergiven fabrik, för att hitta användbara delar av hårdvaror. 
